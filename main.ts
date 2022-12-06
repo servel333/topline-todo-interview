@@ -19,6 +19,7 @@ app.get('/todo', async (_: Request, res: Response) => {
 
 // Route to create a todo
 app.post('/todo', async (req: Request, res: Response) => {
+  console.log(`POST /todo < ${JSON.stringify(req.body)}`);
   const result = await client.query(
     'INSERT INTO todo (label) VALUES ($1) RETURNING *',
     [req.body.label]
@@ -33,6 +34,13 @@ app.put('/todo/:id', async (req: Request, res: Response) => {
     [req.params.id]
   );
   res.send(result.rows[0]);
+});
+
+// Route to get count of all todos
+app.get('/todo-count', async (_: Request, res: Response) => {
+  const result = await client.query('SELECT count(1) from todo');
+  console.log(JSON.stringify(result));
+  res.send(result.rows[0].count);
 });
 
 app.listen(8080, async () => {
