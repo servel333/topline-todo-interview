@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
 import pg from 'pg';
+import schedule from 'node-schedule';
 
 const app: Express = express();
 const client = new pg.Client({
@@ -41,6 +42,18 @@ app.get('/todo-count', async (_: Request, res: Response) => {
   const result = await client.query('SELECT count(1) from todo');
   console.log(JSON.stringify(result));
   res.send(result.rows[0].count);
+});
+
+const rule = new schedule.RecurrenceRule();
+rule.hour = 8;
+rule.tz = 'PST';
+
+const job = schedule.scheduleJob(rule, async function() {
+  console.log(`SCHEDULE INSERT "Brush Teeth"`);
+  const result = await client.query(
+    'INSERT INTO todo (label) VALUES ($1)',
+    ['Brush Teeth']
+  );
 });
 
 app.listen(8080, async () => {
