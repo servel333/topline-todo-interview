@@ -22,11 +22,14 @@ Make a fork of this repo on your own GitHub account and then clone it down to yo
 - You'll need to run an instance of a Postgres database on your development machine.
   The `docker-compose.yml` file includes instructions to spin up an instance of Postgres and expose port 5555.
   If you can't use Docker, please send elliot@growtopline.com an email and we can figure something else out for you.
-- Once you've started the databse, please run the initialization script:
+  `docker-compose up`
+- Once you've started the database, please run the initialization script:
   `psql -f db-init.sql postgresql://local:local@localhost:5555/interview`.
   This will create a table `todo` in your database with columns `id`, `label` and `done`.
 - Install dependencies for the project with `yarn install`.
 - Start the backend server with `yarn server`.
+
+`psql postgresql://local:local@localhost:5555/interview -c "\dt"`
 
 If you have trouble, please don't hesistate to reach out.
 
